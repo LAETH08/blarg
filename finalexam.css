@@ -1,0 +1,22 @@
+body {
+		background: url(money.jpg) repeat-y;
+		font-family: Didot, Baskerville , Garamond
+}
+		
+h2 {
+		background-color: black; 
+		color: white;
+		font-variant: small-caps;
+		letter-spacing: 8pt;
+		text-indent: 30px;
+		display: inline-block;
+}
+
+p {
+		max-width: 500px;
+		padding: 10px; /* add some padding to create space between the text and the box */
+}
+
+h1		{text-align: center;
+		background: url(h1back.jpg); }
+		
