@@ -10,10 +10,14 @@ try {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $first_name = $_POST['first_name'];
     $last_name = $_POST['last_name'];
+	$total_income = $_POST['total_income'];
+	$expense_name = $_POST['expense_name'];
     $amount = $_POST['amount'];
     $date = $_POST['date'];
+	$net_income = $_POST['net_income'];
+	$total_expenses = $_POST['total_expenses'];
 
-    $stmt = $pdo->prepare("INSERT INTO expenses (first_name, last_name, amount, date) VALUES (?, ?, ?, ?)");
+    $stmt = $pdo->prepare("INSERT INTO expenses (first_name, last_name, total_income, expense_name, amount, date, net_income, total_expenses) VALUES (?, ?, ?, ?)");
     if ($stmt->execute([$first_name, $last_name, $amount, $date])) {
         echo "Expense added successfully!";
     } else {
