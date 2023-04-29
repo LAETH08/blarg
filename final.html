@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Personal Budget Management</title>
+    <link rel="stylesheet" href="finalexam.css" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+     function submitForm() {
+    // get form fields
+    var date = document.getElementById("date").value.trim();
+    var firstName = document.getElementById("first_name").value.trim();
+    var lastName = document.getElementById("last_name").value.trim();
+    var totalIncome = document.getElementById("total_income").value.trim();
+    var expenseName = document.getElementById("expense_name").value.trim();
+    var amount = document.getElementById("amount").value.trim();
+
+// validate form fields
+if (date === "" || firstName === "" || lastName === "" || totalIncome === "" || expenseName === "" || amount === "") {
+    alert("Please fill in all fields.");
+    return;
+}
+
+if (isNaN(parseFloat(totalIncome))) {
+    alert("Please enter a valid monthly income.");
+    return;
+}
+
+if (isNaN(parseFloat(amount)) || parseFloat(amount) < 0) {
+    alert("Please enter a valid expense amount.");
+    return;
+}
+
+// send form data and sort option
+var xhttp = new XMLHttpRequest();
+var formData = new FormData(document.querySelector('form'));
+var sortOption = document.querySelector('input[name="sort-by"]:checked');
+xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("results").innerHTML = this.responseText;
+    }
+};
+xhttp.open("POST", "final.php", true);
+xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhttp.send(new FormData(document.querySelector('form')));
+
+}
+
+// add event listeners to radio buttons
+var sortByMonth = document.getElementById("sort-by-month");
+var sortByYear = document.getElementById("sort-by-year");
+sortByMonth.addEventListener("click", submitForm);
+sortByYear.addEventListener("click", submitForm);
+
+// add event listener to submit button
+var submitButton = document.getElementById("submit-button");
+submitButton.addEventListener("click", submitForm);
+</script>
+</head>
+<body>
+    <h2>Introduction</h2>
+    <p>This is a very basic personal budget management program that helps users manage their personal finances. This program will allow the user to add their monthly income, add expenses, and track expenses over time. Please use the inputs below to enter your information. When you're done, hit the submit button to see how well you're managing your budget, or if you need to start saving some money!</p>
+    <form method="POST" action="final.php">
+        <label for="date">Enter the date of the expense (YYYY-MM-DD):</label>
+        <input type="date" id="date" name="date" required><br><br>
+
+            <label for="first_name">First Name:</label>
+    <input type="text" id="first_name" name="first_name" required><br><br>
+
+    <label for="last_name">Last Name:</label>
+    <input type="text" id="last_name" name="last_name" required><br><br>
+	
+	<label for="total_income">Total Monthly Income:</label>
+	<input type="number" id="total_income" name="total_income" required><br><br>
+
+    <label for="expense_name">Expense:</label>
+    <input type="text" id="expense_name" name="expense_name" required><br><br>
+
+    <label for="amount">Amount:</label>
+    <input type="number" id="amount" name="amount" min="0" step="0.01" required><br><br>
+
+<br><br>
+<button type="button" id="submit-button">Submit</button>
+<br><br>
+</form>
+
+<?php if (isset($results) && !empty($results)): ?>
+<h2>Results</h2>
+<!-- Add the radio buttons for sorting -->
+<label>Sort By:</label>
+<input type="radio" id="sort-by-month" name="sort-by" value="month">
+<label for="sort-by-month">Month</label>
+<input type="radio" id="sort-by-year" name="sort-by" value="year">
+<label for="sort-by-year">Year</label>
+    
+<div id="results">
+    <?php if (!empty($results['expenses'])): ?>
+        <h3>Expenses</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Income</th>
+                    <th>Expense</th>
+                    <th>Amount</th>
+                    <th>Net Income</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($results['expenses'] as $expense): ?>
+                    <tr>
+                        <td><?= $expense['date'] ?></td>
+                        <td><?= $expense['total_income'] ?></td>
+                        <td><?= $expense['expense_name'] ?></td>
+                        <td>$<?= $expense['amount'] ?></td>
+                        <td><?= $expense['net_income'] ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+    <br>
+    <p>You have spent $<?= $results['total_expenses'] ?> in <?= $results['num_months'] ?> month(s) and <?= $results['num_years'] ?> year(s).</p>
+</div>
+<br>
+<?php endif; ?>
+</body>
+</html>
