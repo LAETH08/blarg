@@ -57,7 +57,16 @@ submitButton.addEventListener("click", submitForm);
 </script>
 </head>
 <body>
-    <h2>Introduction</h2>
+    <h2>Expense Tracker</h2>
+	<br>
+	<nav>
+	<div class="menu">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="final.html">Expense Tracker</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </div>
     <p>This is a very basic personal budget management program that helps users manage their personal finances. This program will allow the user to add their monthly income, add expenses, and track expenses over time. Please use the inputs below to enter your information. When you're done, hit the submit button to see how well you're managing your budget, or if you need to start saving some money!</p>
     <form action="final.php" method="get">
     <label for="first_name">First Name:</label>
@@ -70,6 +79,18 @@ submitButton.addEventListener("click", submitForm);
     <input type="text" name="last_name" id="last_name" value="<?= $last_name ?>">
     <?php if (!empty($last_name_error)): ?>
         <span class="error"><?= $last_name_error ?></span>
+    <?php endif; ?>
+	<br>
+    <label for="total_income">Monthly Income:</label>
+    <input type="number" name="total_income" id="total_income">
+    <?php if (isset($error) && empty($_GET['total_income'])): ?>
+        <span class="error">Please enter your monthly income.</span>
+    <?php endif; ?>
+	<br>
+    <label for="expense_name">Expense Name:</label>
+    <input type="text" name="expense_name" id="expense_name">
+    <?php if (!empty($expense_name_error)): ?>
+        <span class="error"><?= $expense_name_error ?></span>
     <?php endif; ?>
     <br>
     <label for="amount">Amount:</label>
@@ -85,17 +106,12 @@ submitButton.addEventListener("click", submitForm);
     <?php endif; ?>
     <br>
     <button type="submit" name="submit">Add Expense</button>
-</form>
+	</form>
 
-<?php if (isset($results) && !empty($results)): ?>
-<h2>Results</h2>
-<!-- Add the radio buttons for sorting -->
-<form action="final.php" method="get">
-    <label for="first_name">First Name:</label>
-    <input type="text" name="first_name" id="first_name" value="<?= $first_name ?>">
-    <label for="last_name">Last Name:</label>
-    <input type="text" name="last_name" id="last_name" value="<?= $last_name ?>">
-    <br>
+	<?php if (isset($results) && !empty($results)): ?>
+	<h2>Results</h2>
+	<!-- Add the radio buttons for sorting -->
+	<form action="final.php" method="get">
     <label for="month">Filter by Month:</label>
     <select name="month" id="month">
         <option value="">All Months</option>
@@ -120,15 +136,17 @@ submitButton.addEventListener("click", submitForm);
         <?php endforeach; ?>
     </select>
     <button type="submit">Submit</button>
-</form>
+	</form>
 
-<table>
+	<table>
     <thead>
         <tr>
             <th>Date</th>
-            <th>Income</th>
+            <th>Monthly Income</th>
             <th>Expense</th>
 			<th>Amount</th>
+			<th>Money After Expenses</th>
+			<th>Total Expenses</th>
         </tr>
     </thead>
     <tbody>
@@ -138,14 +156,16 @@ submitButton.addEventListener("click", submitForm);
                 <td><?= $expense['total_income'] ?></td>
                 <td><?= $expense['expense_name'] ?></td>
 				<td><?= $expense['amount'] ?></td>
+				<td><?= $expense['net_income']?></td>
+				<td><?= $expense['total_expenses']?></td>
             </tr>
         <?php endforeach; ?>
     </tbody>
-</table>
+	</table>
     <?php endif; ?>
     <br>
     <p>You have spent $<?= $results['total_expenses'] ?> in <?= $results['num_months'] ?> month(s) and <?= $results['num_years'] ?> year(s).</p>
-</div>
-<br>
+	</div>
+	<br>
 </body>
 </html>
