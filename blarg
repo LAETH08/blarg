@@ -1,4 +1,4 @@
-The choice to print to the screen or a file is broken and doesn't work:
+// The choice to print to the screen or a file is broken and doesn't work:
 #include <iostream>
 #include <fstream>
 #include <string>
