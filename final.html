@@ -59,28 +59,32 @@ submitButton.addEventListener("click", submitForm);
 <body>
     <h2>Introduction</h2>
     <p>This is a very basic personal budget management program that helps users manage their personal finances. This program will allow the user to add their monthly income, add expenses, and track expenses over time. Please use the inputs below to enter your information. When you're done, hit the submit button to see how well you're managing your budget, or if you need to start saving some money!</p>
-    <form method="POST" action="final.php">
-        <label for="date">Enter the date of the expense (YYYY-MM-DD):</label>
-        <input type="date" id="date" name="date" required><br><br>
-
-            <label for="first_name">First Name:</label>
-    <input type="text" id="first_name" name="first_name" required><br><br>
-
+    <form action="final.php" method="get">
+    <label for="first_name">First Name:</label>
+    <input type="text" name="first_name" id="first_name" value="<?= $first_name ?>">
+    <?php if (!empty($first_name_error)): ?>
+        <span class="error"><?= $first_name_error ?></span>
+    <?php endif; ?>
+    <br>
     <label for="last_name">Last Name:</label>
-    <input type="text" id="last_name" name="last_name" required><br><br>
-	
-	<label for="total_income">Total Monthly Income:</label>
-	<input type="number" id="total_income" name="total_income" required><br><br>
-
-    <label for="expense_name">Expense:</label>
-    <input type="text" id="expense_name" name="expense_name" required><br><br>
-
+    <input type="text" name="last_name" id="last_name" value="<?= $last_name ?>">
+    <?php if (!empty($last_name_error)): ?>
+        <span class="error"><?= $last_name_error ?></span>
+    <?php endif; ?>
+    <br>
     <label for="amount">Amount:</label>
-    <input type="number" id="amount" name="amount" min="0" step="0.01" required><br><br>
-
-<br><br>
-<button type="button" id="submit-button">Submit</button>
-<br><br>
+    <input type="number" name="amount" id="amount">
+    <?php if (isset($error) && empty($_GET['amount'])): ?>
+        <span class="error">Please enter an amount.</span>
+    <?php endif; ?>
+    <br>
+    <label for="date">Date:</label>
+    <input type="date" name="date" id="date">
+    <?php if (isset($error) && empty($_GET['date'])): ?>
+        <span class="error">Please enter a date.</span>
+    <?php endif; ?>
+    <br>
+    <button type="submit" name="submit">Add Expense</button>
 </form>
 
 <?php if (isset($results) && !empty($results)): ?>
