@@ -51,16 +51,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $pdo->prepare("INSERT INTO expenses (first_name, last_name, total_income, expense_name, amount, date, net_income, total_expenses) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$first_name, $last_name, $total_income, $expense_name, $amount, $date, $net_income, $total_expenses]);
 
-
         var_dump($_POST); // debug statement
 
         echo "Data inserted successfully";
-    } catch (Exception $e) {
-        // handle errors
-        echo "Error: " . $e->getMessage();
-    }
+   } catch (PDOException $e) {
+  // handle errors
+  echo "Error: " . $e->getMessage();
 }
-
 
 // retrieve data from the database
 $sort_by = $_GET["sort-by"] ?? "date";
@@ -70,10 +67,16 @@ if ($sort_by == "year") {
 } elseif ($sort_by == "month") {
     $order_by = "MONTH(date), YEAR(date)";
 }
+
+// retrieve data from the database
 $sql = "SELECT * FROM expenses ORDER BY $order_by";
 $stmt = $pdo->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// check if the query was successful
+if (!$data) {
+  die("Database query failed: " . mysqli_error($connection));
+}
 
 if (count($data) > 0) {
     $total_expenses = 0;
