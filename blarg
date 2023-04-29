@@ -1,3 +1,4 @@
+The choice to print to the screen or a file is broken and doesn't work:
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -127,19 +128,18 @@ void printToFile(const memberType members[], int size) {
     }
 }
 
-friend ostream& operator<< (ostream& os, const memberType& mt) {
-    os << mt.firstName << ' ' << mt.lastName << ' ' << mt.memberID << ' ' << mt.booksBought << ' ' << mt.amountSpent << endl;
-    for (int i = 0; i < mt.booksBought; i++) {
-        os << mt.isbn[i] << endl;
+void printData(const memberType members[], int size, ostream& os) {
+    for (int i = 0; i < size; i++) {
+        os << members[i];
     }
-    return os;
 }
 
 int main() {
     memberType members[10];
 
     // Add members
-    for (int i = 0; i < 10; i++) {
+    int i = 0;
+    while (i < 10) {
         string firstName, lastName, isbn[50];
         int memberID, books;
         double spent;
@@ -160,25 +160,37 @@ int main() {
             cin >> isbn[j];
         }
         members[i] = memberType(firstName, lastName, memberID, books, spent, isbn);
+
+        cout << "Do you want to add another member? (1=yes, 0=no)";
+        int continueAdding;
+        cin >> continueAdding;
+        if (continueAdding == 0) {
+            break;
+        }
+        i++;
     }
 
     int choice;
     cout << "Choose output option:" << endl;
     cout << "1. Print to screen" << endl;
     cout << "2. Print to file" << endl;
-    cout << "Enter choice: ";
     cin >> choice;
 
-    switch (choice) {
-    case 1:
-        for (int i = 0; i < 10; i++) {
-            cout << members[i] << endl;
+    if (choice == 1) {
+        printData(members, 10, cout);
+    }
+    else if (choice == 2) {
+        ofstream file("output.txt");
+        if (file.is_open()) {
+            printData(members, 10, file);
+            file.close();
+            cout << "Data written to output.txt" << endl;
         }
-        break;
-    case 2:
-        printToFile(members, 10);
-        break;
-    default:
+        else {
+            cout << "Unable to open output file" << endl;
+        }
+    }
+    else {
         cout << "Invalid choice" << endl;
     }
 
