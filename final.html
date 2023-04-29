@@ -5,56 +5,54 @@
     <link rel="stylesheet" href="finalexam.css" type="text/css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-     function submitForm() {
-    // get form fields
-    var date = document.getElementById("date").value.trim();
-    var firstName = document.getElementById("first_name").value.trim();
-    var lastName = document.getElementById("last_name").value.trim();
-    var totalIncome = document.getElementById("total_income").value.trim();
-    var expenseName = document.getElementById("expense_name").value.trim();
-    var amount = document.getElementById("amount").value.trim();
+        function submitForm() {
+            // get form fields
+            var date = document.getElementById("date").value.trim();
+            var firstName = document.getElementById("first_name").value.trim();
+            var lastName = document.getElementById("last_name").value.trim();
+            var totalIncome = document.getElementById("total_income").value.trim();
+            var expenseName = document.getElementById("expense_name").value.trim();
+            var amount = document.getElementById("amount").value.trim();
 
-// validate form fields
-if (date === "" || firstName === "" || lastName === "" || totalIncome === "" || expenseName === "" || amount === "") {
-    alert("Please fill in all fields.");
-    return;
-}
+            // validate form fields
+            if (date === "" || firstName === "" || lastName === "" || totalIncome === "" || expenseName === "" || amount === "") {
+                alert("Please fill in all fields.");
+                return;
+            }
 
-if (isNaN(parseFloat(totalIncome))) {
-    alert("Please enter a valid monthly income.");
-    return;
-}
+            if (isNaN(parseFloat(totalIncome))) {
+                alert("Please enter a valid monthly income.");
+                return;
+            }
 
-if (isNaN(parseFloat(amount)) || parseFloat(amount) < 0) {
-    alert("Please enter a valid expense amount.");
-    return;
-}
+            if (isNaN(parseFloat(amount)) || parseFloat(amount) < 0) {
+                alert("Please enter a valid expense amount.");
+                return;
+            }
 
-// send form data and sort option
-var xhttp = new XMLHttpRequest();
-var formData = new FormData(document.querySelector('form'));
-var sortOption = document.querySelector('input[name="sort-by"]:checked');
-xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-        document.getElementById("results").innerHTML = this.responseText;
-    }
-};
-xhttp.open("POST", "final.php", true);
-xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhttp.send(new FormData(document.querySelector('form')));
+            // send form data and sort option
+            var xhttp = new XMLHttpRequest();
+            var formData = new FormData(document.querySelector('form'));
+            var sortOption = document.querySelector('input[name="sort-by"]:checked');
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("results").innerHTML = this.responseText;
+                }
+            };
+            xhttp.open("POST", "final.php", true);
+            xhttp.send(formData);
+        }
 
-}
+        // add event listeners to radio buttons
+        var sortByMonth = document.getElementById("sort-by-month");
+        var sortByYear = document.getElementById("sort-by-year");
+        sortByMonth.addEventListener("click", submitForm);
+        sortByYear.addEventListener("click", submitForm);
 
-// add event listeners to radio buttons
-var sortByMonth = document.getElementById("sort-by-month");
-var sortByYear = document.getElementById("sort-by-year");
-sortByMonth.addEventListener("click", submitForm);
-sortByYear.addEventListener("click", submitForm);
-
-// add event listener to submit button
-var submitButton = document.getElementById("submit-button");
-submitButton.addEventListener("click", submitForm);
-</script>
+        // add event listener to submit button
+        var submitButton = document.getElementById("submit-button");
+        submitButton.addEventListener("click", submitForm);
+    </script>
 </head>
 <body>
     <h2>Expense Tracker</h2>
@@ -109,34 +107,48 @@ submitButton.addEventListener("click", submitForm);
 	</form>
 
 	<?php if (isset($results) && !empty($results)): ?>
-	<h2>Results</h2>
-	<!-- Add the radio buttons for sorting -->
-	<form action="final.php" method="get">
-    <label for="month">Filter by Month:</label>
-    <select name="month" id="month">
-        <option value="">All Months</option>
-        <option value="1" <?= $month === '1' ? 'selected' : '' ?>>January</option>
-        <option value="2" <?= $month === '2' ? 'selected' : '' ?>>February</option>
-        <option value="3" <?= $month === '3' ? 'selected' : '' ?>>March</option>
-        <option value="4" <?= $month === '4' ? 'selected' : '' ?>>April</option>
-        <option value="5" <?= $month === '5' ? 'selected' : '' ?>>May</option>
-        <option value="6" <?= $month === '6' ? 'selected' : '' ?>>June</option>
-        <option value="7" <?= $month === '7' ? 'selected' : '' ?>>July</option>
-        <option value="8" <?= $month === '8' ? 'selected' : '' ?>>August</option>
-        <option value="9" <?= $month === '9' ? 'selected' : '' ?>>September</option>
-        <option value="10" <?= $month === '10' ? 'selected' : '' ?>>October</option>
-		<option value="11" <?= $month === '11' ? 'selected' : '' ?>>November</option>
-		<option value="12" <?= $month === '12' ? 'selected' : '' ?>>December</option>
-    </select>
-    <label for="year">Filter by Year:</label>
-    <select name="year" id="year">
-        <option value="">All Years</option>
-        <?php foreach ($years as $y): ?>
-            <option value="<?= $y ?>" <?= $year === $y ? 'selected' : '' ?>><?= $y ?></option>
-        <?php endforeach; ?>
-    </select>
-    <button type="submit">Submit</button>
-	</form>
+    <h2>Results</h2>
+    <!-- Add the radio buttons for sorting --> 
+    <form action="final.php" method="POST">
+        <label for="month">Filter by Month:</label>
+        <select name="month" id="month">
+            <option value="">All Months</option>
+            <option value="1" <?= $month === '1' ? 'selected' : '' ?>>January</option>
+            <option value="2" <?= $month === '2' ? 'selected' : '' ?>>February</option>
+            <option value="3" <?= $month === '3' ? 'selected' : '' ?>>March</option>
+            <option value="4" <?= $month === '4' ? 'selected' : '' ?>>April</option>
+            <option value="5" <?= $month === '5' ? 'selected' : '' ?>>May</option>
+            <option value="6" <?= $month === '6' ? 'selected' : '' ?>>June</option>
+            <option value="7" <?= $month === '7' ? 'selected' : '' ?>>July</option>
+            <option value="8" <?= $month === '8' ? 'selected' : '' ?>>August</option>
+            <option value="9" <?= $month === '9' ? 'selected' : '' ?>>September</option>
+            <option value="10" <?= $month === '10' ? 'selected' : '' ?>>October</option>
+            <option value="11" <?= $month === '11' ? 'selected' : '' ?>>November</option>
+            <option value="12" <?= $month === '12' ? 'selected' : '' ?>>December</option>
+        </select>
+        <label for="year">Filter by Year:</label>
+        <select name="year" id="year">
+            <option value="">All Years</option>
+            <?php foreach ($years as $y): ?>
+                <option value="<?= $y ?>" <?= $year === $y ? 'selected' : '' ?>><?= $y ?></option>
+            <?php endforeach; ?>
+        </select>
+        <button type="submit">Apply Filters</button>
+    </form>
+
+    <!-- Form for adding expenses -->
+    <form action="add_expense.php" method="POST">
+        <label for="expense_name">Expense Name:</label>
+        <input type="text" name="expense_name" id="expense_name">
+        <label for="amount">Amount:</label>
+        <input type="text" name="amount" id="amount">
+        <label for="date">Date:</label>
+        <input type="date" name="date" id="date">
+        <button type="submit">Add Expense</button>
+    </form>
+
+<?php endif; ?>
+
 
 	<table>
     <thead>
