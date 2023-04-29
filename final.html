@@ -86,42 +86,62 @@ submitButton.addEventListener("click", submitForm);
 <?php if (isset($results) && !empty($results)): ?>
 <h2>Results</h2>
 <!-- Add the radio buttons for sorting -->
-<label>Sort By:</label>
-<input type="radio" id="sort-by-month" name="sort-by" value="month">
-<label for="sort-by-month">Month</label>
-<input type="radio" id="sort-by-year" name="sort-by" value="year">
-<label for="sort-by-year">Year</label>
-    
-<div id="results">
-    <?php if (!empty($results['expenses'])): ?>
-        <h3>Expenses</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Income</th>
-                    <th>Expense</th>
-                    <th>Amount</th>
-                    <th>Net Income</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($results['expenses'] as $expense): ?>
-                    <tr>
-                        <td><?= $expense['date'] ?></td>
-                        <td><?= $expense['total_income'] ?></td>
-                        <td><?= $expense['expense_name'] ?></td>
-                        <td>$<?= $expense['amount'] ?></td>
-                        <td><?= $expense['net_income'] ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+<form action="final.php" method="get">
+    <label for="first_name">First Name:</label>
+    <input type="text" name="first_name" id="first_name" value="<?= $first_name ?>">
+    <label for="last_name">Last Name:</label>
+    <input type="text" name="last_name" id="last_name" value="<?= $last_name ?>">
+    <br>
+    <label for="month">Filter by Month:</label>
+    <select name="month" id="month">
+        <option value="">All Months</option>
+        <option value="1" <?= $month === '1' ? 'selected' : '' ?>>January</option>
+        <option value="2" <?= $month === '2' ? 'selected' : '' ?>>February</option>
+        <option value="3" <?= $month === '3' ? 'selected' : '' ?>>March</option>
+        <option value="4" <?= $month === '4' ? 'selected' : '' ?>>April</option>
+        <option value="5" <?= $month === '5' ? 'selected' : '' ?>>May</option>
+        <option value="6" <?= $month === '6' ? 'selected' : '' ?>>June</option>
+        <option value="7" <?= $month === '7' ? 'selected' : '' ?>>July</option>
+        <option value="8" <?= $month === '8' ? 'selected' : '' ?>>August</option>
+        <option value="9" <?= $month === '9' ? 'selected' : '' ?>>September</option>
+        <option value="10" <?= $month === '10' ? 'selected' : '' ?>>October</option>
+		<option value="11" <?= $month === '11' ? 'selected' : '' ?>>November</option>
+		<option value="12" <?= $month === '12' ? 'selected' : '' ?>>December</option>
+    </select>
+    <label for="year">Filter by Year:</label>
+    <select name="year" id="year">
+        <option value="">All Years</option>
+        <?php foreach ($years as $y): ?>
+            <option value="<?= $y ?>" <?= $year === $y ? 'selected' : '' ?>><?= $y ?></option>
+        <?php endforeach; ?>
+    </select>
+    <button type="submit">Submit</button>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Income</th>
+            <th>Expense</th>
+			<th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($expenses as $expense): ?>
+            <tr>
+                <td><?= $expense['date'] ?></td>
+                <td><?= $expense['total_income'] ?></td>
+                <td><?= $expense['expense_name'] ?></td>
+				<td><?= $expense['amount'] ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
     <?php endif; ?>
     <br>
     <p>You have spent $<?= $results['total_expenses'] ?> in <?= $results['num_months'] ?> month(s) and <?= $results['num_years'] ?> year(s).</p>
 </div>
 <br>
-<?php endif; ?>
 </body>
 </html>
