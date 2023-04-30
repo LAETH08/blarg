@@ -58,13 +58,14 @@
     <h2>Expense Tracker</h2>
 	<br>
 	<nav>
-	<div class="menu">
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="final.html">Expense Tracker</a></li>
-      <li><a href="about.html">About</a></li>
-    </ul>
-  </div>
+		<div class="menu">
+			<ul>
+			  <li><a href="index.html">Home</a></li>
+			  <li><a href="final.html">Expense Tracker</a></li>
+			  <li><a href="about.html">About</a></li>
+			</ul>
+		</div>
+	</nav>
     <p>This is a very basic personal budget management program that helps users manage their personal finances. This program will allow the user to add their monthly income, add expenses, and track expenses over time. Please use the inputs below to enter your information. When you're done, hit the submit button to see how well you're managing your budget, or if you need to start saving some money!</p>
     <form action="final.php" method="get">
     <label for="first_name">First Name:</label>
@@ -105,79 +106,5 @@
     <br>
     <button type="submit" name="submit">Add Expense</button>
 	</form>
-
-	<?php if (isset($results) && !empty($results)): ?>
-    <h2>Results</h2>
-    <!-- Add the radio buttons for sorting --> 
-    <form action="final.php" method="POST">
-        <label for="month">Filter by Month:</label>
-        <select name="month" id="month">
-            <option value="">All Months</option>
-            <option value="1" <?= $month === '1' ? 'selected' : '' ?>>January</option>
-            <option value="2" <?= $month === '2' ? 'selected' : '' ?>>February</option>
-            <option value="3" <?= $month === '3' ? 'selected' : '' ?>>March</option>
-            <option value="4" <?= $month === '4' ? 'selected' : '' ?>>April</option>
-            <option value="5" <?= $month === '5' ? 'selected' : '' ?>>May</option>
-            <option value="6" <?= $month === '6' ? 'selected' : '' ?>>June</option>
-            <option value="7" <?= $month === '7' ? 'selected' : '' ?>>July</option>
-            <option value="8" <?= $month === '8' ? 'selected' : '' ?>>August</option>
-            <option value="9" <?= $month === '9' ? 'selected' : '' ?>>September</option>
-            <option value="10" <?= $month === '10' ? 'selected' : '' ?>>October</option>
-            <option value="11" <?= $month === '11' ? 'selected' : '' ?>>November</option>
-            <option value="12" <?= $month === '12' ? 'selected' : '' ?>>December</option>
-        </select>
-        <label for="year">Filter by Year:</label>
-        <select name="year" id="year">
-            <option value="">All Years</option>
-            <?php foreach ($years as $y): ?>
-                <option value="<?= $y ?>" <?= $year === $y ? 'selected' : '' ?>><?= $y ?></option>
-            <?php endforeach; ?>
-        </select>
-        <button type="submit">Apply Filters</button>
-    </form>
-
-    <!-- Form for adding expenses -->
-    <form action="add_expense.php" method="POST">
-        <label for="expense_name">Expense Name:</label>
-        <input type="text" name="expense_name" id="expense_name">
-        <label for="amount">Amount:</label>
-        <input type="text" name="amount" id="amount">
-        <label for="date">Date:</label>
-        <input type="date" name="date" id="date">
-        <button type="submit">Add Expense</button>
-    </form>
-
-<?php endif; ?>
-
-
-	<table>
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Monthly Income</th>
-            <th>Expense</th>
-			<th>Amount</th>
-			<th>Money After Expenses</th>
-			<th>Total Expenses</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($expenses as $expense): ?>
-            <tr>
-                <td><?= $expense['date'] ?></td>
-                <td><?= $expense['total_income'] ?></td>
-                <td><?= $expense['expense_name'] ?></td>
-				<td><?= $expense['amount'] ?></td>
-				<td><?= $expense['net_income']?></td>
-				<td><?= $expense['total_expenses']?></td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-	</table>
-    <?php endif; ?>
-    <br>
-    <p>You have spent $<?= $results['total_expenses'] ?> in <?= $results['num_months'] ?> month(s) and <?= $results['num_years'] ?> year(s).</p>
-	</div>
-	<br>
 </body>
 </html>
